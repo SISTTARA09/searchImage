@@ -1,1 +1,1 @@
-repo: <a href='https://sisttara09.github.io/searchImage/'>Demo</a>
+repo: <a href='https://sisttara09.github.io/searchImage/' target='_blank'>Demo</a>

@@ -7,55 +7,32 @@ let searchForm = document.getElementById("searchForm");
 let showBox = document.querySelector(".show-box");
 let showMoreBtn = document.getElementById("showMore");
 let num = Math.random().toFixed(1) * 10;
-searchForm.addEventListener("submit", async (ev) => {
+// CREATE THE SEARCH FUNCTION
+async function searchFunction(ev) {
 	ev.preventDefault();
-	showBox.textContent = "";
-	// WORK WITH API
-	let mainData = await fetch(
-		`https://api.unsplash.com/search/photos?page=${num++}&query=${
-			searchInp.value
-		}&client_id=${accesKey}`
-	);
-	try {
-		let data = await mainData.json();
-		for (let i in data.results) {
-			let url = data.results[i].links.download;
-			let imgPage = data.results[i].links.html;
-			showBox.innerHTML += `<div class="box">
-			<a href="${imgPage}" target="_blank">
-			<img src="${url}">
-			<p class="description">${data.results[i].alt_description}</p>
-			</a>
-			</div>` 
-		}
-	} catch (reason) {
-		cl(reason);
-	}
-	// SHOW MORE BUTTON
-	setTimeout(() => {
+	submit.addEventListener("click", () => (showBox.innerHTML = ""));
+	let fetchUrl = `https://api.unsplash.com/search/photos?page=${num}&query=${searchInp.value}&client_id=${accesKey}`;
+	let mainData = await fetch(fetchUrl);
+	let data = await mainData.json();
+	let resultsArr = data.results;
+	// WORK WITH SHOW BOX
+	resultsArr.map((ele) => {
+		let url = ele.urls.thumb;
+		let imgPage = ele.links.html;
+		let description = ele.alt_description;
+		showBox.innerHTML += `
+		<div class="box">
+		<a href="${imgPage}" target="_blank">
+		<img src="${url}">
+		<p class="description">${description}</p>
+		</a>
+		</div>`;
+		// DISPLAY THE SHOW MORE BUTTON
 		showMoreBtn.style = "display: block;";
-	}, 1000);
-	showMoreBtn.onclick = async function () {
-		let mainData = await fetch(
-			`https://api.unsplash.com/search/photos?page=${num++}&query=${
-				searchInp.value
-			}&client_id=${accesKey}`
-		);
-		try {
-			let data = await mainData.json();
-			for (let i in data.results) {
-				let url = data.results[i].links.download;
-				let imgPage = data.results[i].links.html;
-				showBox.innerHTML += `<div class="box">
-				<a href="${imgPage}" target="_blank">
-				<img src="${url}">
-				<p class="description">${data.results[i].alt_description}</p>
-				</a>
-				</div>`
-			}
-		} catch (re) {
-			cl(re);
-		}
-	};
-});
-('<div class="box"><a href="https://unsplash.com/photos/boEl1XGLZ10" target="_blank"><img src="https://unsplash.com/photos/boEl1XGLZ10/download?ixid=M3w0NjI2MzZ8MHwxfHNlYXJjaHwzMXx8ZnxlbnwwfHx8fDE2ODY5OTI3MDh8MA"><p class="description">a green sports car parked in front of a building</p></a></div>');
+	});
+	num++;
+}
+// ADD EVENT LISTENER TO THE SEARCH FORM
+searchForm.addEventListener("submit", searchFunction);
+// ADD EVENT LISTENER TO THE SHOW MORE BUTTON
+showMoreBtn.addEventListener("click", searchFunction);

@@ -1,5 +1,6 @@
 "use strict";
 const cl = console.log;
+// LET THE ELEMENTS
 let accesKey = "aA3w5gQhatBLRfXP5sQGBPeyNxhW3ayTOlfb3fgfQxE";
 let submit = document.getElementById("submit");
 let searchInp = document.getElementById("searchInp");
@@ -17,7 +18,7 @@ async function searchFunction(ev) {
 	let resultsArr = data.results;
 	// WORK WITH SHOW BOX
 	resultsArr.map((ele) => {
-		let url = ele.urls.thumb;
+		let url = ele.urls.small;
 		let imgPage = ele.links.html;
 		let description = ele.alt_description;
 		showBox.innerHTML += `
